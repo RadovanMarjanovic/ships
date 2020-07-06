@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  uuid: 
+  container_type: MyString
+  quantity: 1
+  ship: one
+
+two:
+  uuid: 
+  container_type: MyString
+  quantity: 1
+  ship: two
