@@ -1,4 +1,6 @@
 class Ship < ApplicationRecord
+  after_create :set_uuid
+
   has_many :containers, dependent: :destroy
   has_many :sailors, dependent: :destroy
 

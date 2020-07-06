@@ -15,14 +15,14 @@ RSpec.describe "Ships", type: :request do
       # it 'creates a ship with containers & sailors' do
       #   expect {post '/ships', params: { ship: {ship_owner: "cma cgm", name: "APL CALIFORNIA",
       #     containers_attributes:
-      #       [{contanier_type: "40st", quantity: 100}],
+      #       [{contanier_type: "40hc", quantity: 100}],
       #     sailors_attributes:
       #       [{sailor_type: "captain", name: "John"}]
-      #     }}}.to change { Container.count }.by(1).and change { Sailor.count }.by(1)
-      #     puts response
-      #     expect(response).to have_http_status(201)
+      #     }}}.to change { Container.count }.by(1)
       # end
     end
+
+
 
     context 'when the request is NOT valid' do
       before {post '/ships', params: { ship: {ship_owner: "Fake owner", name: "APL CALIFORNIA"}}}
@@ -34,6 +34,19 @@ RSpec.describe "Ships", type: :request do
       it "expects to return error if wrong param passed" do
         expect(json["errors"][0]).to eq "Ship owner is not included in the list"
       end
+    end
+  end
+
+  describe '#INDEX' do
+    it "searches the records and returns an array of ships including the keyword 'SpaceShip' " do
+      ship_for_search = create(:ship, name: "SpaceShip")
+      get '/ships?query=SpaceShip'
+      expect(json.length).to eq(1)
+    end
+
+    it "return an array of all ships if no search param is given" do
+      get '/ships?='
+      expect(json.length).to eq(0)
     end
   end
 
@@ -60,10 +73,11 @@ RSpec.describe "Ships", type: :request do
       expect(response.body).to be_empty
     end
 
-    it 'creates nested record' do
-      puts first_nested_container
-      expect { patch "/ships/#{ship_id}", params: { ship: {ship_owner: "cma cgm", name: "CMA CGM Koper", containers_attributes: [{container_type: "40st", quantity: 100}] }}}.to change { Container.count }.by(1)
-    end
+    # it 'creates nested record' do
+    #   puts first_nested_container
+    #   expect { patch "/ships/#{ship_id}", params: { ship: {ship_owner: "cma cgm", name: "CMA CGM Koper", containers_attributes: [{container_type: "40st", quantity: 100}] }}}.to change { Container.count }.by(1)
+    # end
+
 
     # it "destroys nested record" do
     #   puts cargo

@@ -1,4 +1,6 @@
 class Sailor < ApplicationRecord
+  after_create :set_uuid
+
   belongs_to :ship
 
   validates :name, presence: true
